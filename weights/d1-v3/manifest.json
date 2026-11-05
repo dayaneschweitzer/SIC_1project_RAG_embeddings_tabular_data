@@ -1,0 +1,402 @@
+{
+  "schema_version": "sic_public_d1_weights_v1",
+  "package_version": "d1-v3",
+  "checkpoint_schema": "sic_d1_v3_retrieval_conditioned_checkpoint_v1",
+  "format": "PyTorch .pt; inference-only metadata and two float32 state_dicts",
+  "runtime": "src/scientific/d1.py",
+  "loader": "src/scientific/program_v3.py:load_checkpoint",
+  "authorization": {
+    "status": "expressly_authorized_by_project_responsible_researcher",
+    "document": "AUTHORIZATION.md",
+    "standard_license_identifier": null
+  },
+  "runtime_versions_verified": {
+    "python": "3.13.2",
+    "torch": "2.7.0+cpu"
+  },
+  "operation_head": [
+    "LayerNorm(input)",
+    "Linear(input,128)",
+    "GELU",
+    "Linear(128,9)"
+  ],
+  "argument_ranker": [
+    "LayerNorm(input)",
+    "Linear(input,128)",
+    "GELU",
+    "Linear(128,1)",
+    "squeeze(-1)"
+  ],
+  "operation_labels_in_order": [
+    "write_value",
+    "write_formula",
+    "insert_row",
+    "delete_row",
+    "insert_column",
+    "sort_range",
+    "unmerge_range",
+    "copy_sheet",
+    "REFUSE"
+  ],
+  "feature_roles_in_order": [
+    "sheet",
+    "targets",
+    "value",
+    "formula",
+    "position",
+    "range",
+    "new_sheet"
+  ],
+  "feature_kinds_in_order": [
+    "sheet",
+    "cell",
+    "cells",
+    "range",
+    "formula",
+    "number",
+    "column",
+    "text"
+  ],
+  "role_contract": {
+    "write_value": [
+      "sheet",
+      "targets",
+      "value"
+    ],
+    "write_formula": [
+      "sheet",
+      "targets",
+      "formula"
+    ],
+    "insert_row": [
+      "sheet",
+      "position"
+    ],
+    "delete_row": [
+      "sheet",
+      "position"
+    ],
+    "insert_column": [
+      "sheet",
+      "position"
+    ],
+    "sort_range": [
+      "sheet",
+      "range"
+    ],
+    "unmerge_range": [
+      "sheet",
+      "range"
+    ],
+    "copy_sheet": [
+      "sheet",
+      "new_sheet"
+    ]
+  },
+  "checkpoint_roles_field": "Historical list of role-contract operation keys; not the feature one-hot role order",
+  "preserved_payload_keys": [
+    "schema_version",
+    "condition",
+    "encoder_id",
+    "encoder_weights_sha256",
+    "encoder_frozen",
+    "instruction_limit",
+    "long_input_strategy",
+    "retrieval_contract",
+    "feature_contract",
+    "operation_input_dimension",
+    "argument_input_dimension",
+    "hidden_dimension",
+    "classes",
+    "roles",
+    "operation_state",
+    "argument_state"
+  ],
+  "removed_non_inference_keys": [
+    "encoder_path",
+    "corpus_manifest_sha256",
+    "seed",
+    "selected_epoch",
+    "train_examples",
+    "validation_examples",
+    "holdout_examples"
+  ],
+  "preprocessing": {
+    "instruction_limit": 512,
+    "chunk_content_tokens": 510,
+    "overlap_tokens": 32,
+    "chunk_aggregation": "normalized mean",
+    "document_token_budget": 256,
+    "evidence_weighting": "softmax(score - 0.08 * (rank - 1)); normalized weighted mean",
+    "operation_features": "instruction,evidence,product,absolute_difference,4 score/rank statistics",
+    "argument_features": "clause,context,candidate,clause*candidate,9 operation,7 role,8 kind,2 source,2 position,2 metadata"
+  },
+  "corpus_provenance": {
+    "source_manifest_schema": "sic_d1_v3_prospective_corpus_v1",
+    "sources": [
+      "prospective authored templates and synthetic workbooks only"
+    ],
+    "external_datasets_for_head_training": "Not evidenced by the manifests linked to these checkpoints; no external dataset license assigned",
+    "records_included": false
+  },
+  "training_configuration_reference_only": {
+    "encoder_frozen": true,
+    "hidden_dimension": 128,
+    "optimizer": "AdamW",
+    "operation_lr": 0.0015,
+    "argument_lr": 0.001,
+    "weight_decay": 0.0002,
+    "operation_loss": "CrossEntropyLoss",
+    "argument_loss": "BCEWithLogitsLoss with pos_weight=negative/positive",
+    "operation_batch_size": 48,
+    "argument_batch_size": 256,
+    "max_epochs": 80,
+    "gradient_norm_clip": 5.0,
+    "needed_for_inference": false
+  },
+  "excluded": [
+    "training_records",
+    "validation_records",
+    "holdout_records",
+    "datasets",
+    "workbooks",
+    "goldens",
+    "optimizer_state",
+    "training_logs",
+    "experimental_results",
+    "credentials",
+    "encoder_weights"
+  ],
+  "checkpoints": [
+    {
+      "condition": "D1-A-v3",
+      "path": "D1-A-v3/decision_v3.pt",
+      "sha256": "3f8cec6a44135f9135b9c37227f5af193bc2a21e42455293300a2ef8d4b70646",
+      "size_bytes": 1626951,
+      "source_checkpoint_sha256": "b2d811175359e00a1ba88d73701c7ed61018de1feb6494c4fe3527368f81c64a",
+      "source_size_bytes": 1627335,
+      "source_reference": "_isolated/d1_v3_retrieval_conditioned_20261027_02/checkpoints/D1-A-v3/decision_v3.pt",
+      "source_corpus_manifest_sha256": "59564fcfb5d42d490265a440e9795421a2e38e2e864f09558cdcabb505af435a",
+      "architectures": [
+        "C1",
+        "C2"
+      ],
+      "encoder": {
+        "id": "E1_MINILM",
+        "model": "sentence-transformers/all-MiniLM-L6-v2",
+        "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+        "variant": null,
+        "dimension": 384,
+        "weights_sha256": "53aa51172d142c89d9012cce15ae4d6cc0ca6895895114379cacb4fab128d9db",
+        "frozen": true
+      },
+      "operation_input_dimension": 1540,
+      "argument_input_dimension": 1566,
+      "hidden_dimension": 128,
+      "operation_parameters": 201489,
+      "argument_parameters": 203837,
+      "tensors": {
+        "operation_state": {
+          "network.0.weight": {
+            "shape": [
+              1540
+            ],
+            "dtype": "torch.float32"
+          },
+          "network.0.bias": {
+            "shape": [
+              1540
+            ],
+            "dtype": "torch.float32"
+          },
+          "network.1.weight": {
+            "shape": [
+              128,
+              1540
+            ],
+            "dtype": "torch.float32"
+          },
+          "network.1.bias": {
+            "shape": [
+              128
+            ],
+            "dtype": "torch.float32"
+          },
+          "network.3.weight": {
+            "shape": [
+              9,
+              128
+            ],
+            "dtype": "torch.float32"
+          },
+          "network.3.bias": {
+            "shape": [
+              9
+            ],
+            "dtype": "torch.float32"
+          }
+        },
+        "argument_state": {
+          "network.0.weight": {
+            "shape": [
+              1566
+            ],
+            "dtype": "torch.float32"
+          },
+          "network.0.bias": {
+            "shape": [
+              1566
+            ],
+            "dtype": "torch.float32"
+          },
+          "network.1.weight": {
+            "shape": [
+              128,
+              1566
+            ],
+            "dtype": "torch.float32"
+          },
+          "network.1.bias": {
+            "shape": [
+              128
+            ],
+            "dtype": "torch.float32"
+          },
+          "network.3.weight": {
+            "shape": [
+              1,
+              128
+            ],
+            "dtype": "torch.float32"
+          },
+          "network.3.bias": {
+            "shape": [
+              1
+            ],
+            "dtype": "torch.float32"
+          }
+        }
+      },
+      "compatibility": {
+        "strict_state_dict": true,
+        "all_tensors_equal_to_source": true,
+        "inference_or_training_executed": false
+      }
+    },
+    {
+      "condition": "D1-B-v3",
+      "path": "D1-B-v3/decision_v3.pt",
+      "sha256": "e23235c0e0028111fbb952324f0817589a8a72a8cdeb99eb0c764c3fef769466",
+      "size_bytes": 3224391,
+      "source_checkpoint_sha256": "3fdd94f5883ef64cbacf04e42fd0f2bce22b94b0dd108ac0b58b8aec5bca342d",
+      "source_size_bytes": 3224775,
+      "source_reference": "_isolated/d1_v3_retrieval_conditioned_20261027_02/checkpoints/D1-B-v3/decision_v3.pt",
+      "source_corpus_manifest_sha256": "59564fcfb5d42d490265a440e9795421a2e38e2e864f09558cdcabb505af435a",
+      "architectures": [
+        "C1",
+        "C2"
+      ],
+      "encoder": {
+        "id": "E2_TABERTA",
+        "model": "EnasKhwaileh/TABERTA",
+        "revision": "47c0bd1afb8583596532df63d65b1101a5b9ff82",
+        "variant": "7_hybrid_model_reg",
+        "dimension": 768,
+        "weights_sha256": "13ddafe0cb40ad24bb5f5bad92bd723055d97eddc48972593aa544a419b61f82",
+        "frozen": true
+      },
+      "operation_input_dimension": 3076,
+      "argument_input_dimension": 3102,
+      "hidden_dimension": 128,
+      "operation_parameters": 401169,
+      "argument_parameters": 403517,
+      "tensors": {
+        "operation_state": {
+          "network.0.weight": {
+            "shape": [
+              3076
+            ],
+            "dtype": "torch.float32"
+          },
+          "network.0.bias": {
+            "shape": [
+              3076
+            ],
+            "dtype": "torch.float32"
+          },
+          "network.1.weight": {
+            "shape": [
+              128,
+              3076
+            ],
+            "dtype": "torch.float32"
+          },
+          "network.1.bias": {
+            "shape": [
+              128
+            ],
+            "dtype": "torch.float32"
+          },
+          "network.3.weight": {
+            "shape": [
+              9,
+              128
+            ],
+            "dtype": "torch.float32"
+          },
+          "network.3.bias": {
+            "shape": [
+              9
+            ],
+            "dtype": "torch.float32"
+          }
+        },
+        "argument_state": {
+          "network.0.weight": {
+            "shape": [
+              3102
+            ],
+            "dtype": "torch.float32"
+          },
+          "network.0.bias": {
+            "shape": [
+              3102
+            ],
+            "dtype": "torch.float32"
+          },
+          "network.1.weight": {
+            "shape": [
+              128,
+              3102
+            ],
+            "dtype": "torch.float32"
+          },
+          "network.1.bias": {
+            "shape": [
+              128
+            ],
+            "dtype": "torch.float32"
+          },
+          "network.3.weight": {
+            "shape": [
+              1,
+              128
+            ],
+            "dtype": "torch.float32"
+          },
+          "network.3.bias": {
+            "shape": [
+              1
+            ],
+            "dtype": "torch.float32"
+          }
+        }
+      },
+      "compatibility": {
+        "strict_state_dict": true,
+        "all_tensors_equal_to_source": true,
+        "inference_or_training_executed": false
+      }
+    }
+  ]
+}
